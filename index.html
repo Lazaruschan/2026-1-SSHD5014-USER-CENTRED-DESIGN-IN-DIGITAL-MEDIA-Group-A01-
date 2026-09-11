@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title is set from COURSE_CONFIG -->
+    <title>Course Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+    <script src="auth.js" defer></script>
+</head>
+
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+
+    <!--
+      ============================================================
+      COURSE WEBSITE TEMPLATE
+      ============================================================
+      How to use for a new course:
+        1. Duplicate this file (e.g. index.html for each repo/site).
+        2. Edit ONLY the COURSE_CONFIG object in the <script> below.
+        3. Leave the HTML markup as-is — the page renders from config.
+
+      Optional: hide a tab by setting its `enabled: false` in config.tabs
+      ============================================================
+    -->
+
+    <!-- Header -->
+    <header class="bg-black text-white py-12 px-6 shadow-md">
+        <div class="max-w-5xl mx-auto">
+            <p id="header-eyebrow" class="text-gray-400 text-sm font-semibold tracking-wider uppercase mb-2"></p>
+            <h1 id="header-title" class="text-3xl md:text-5xl font-bold mb-4"></h1>
+            <p id="header-tagline" class="text-lg text-gray-400 max-w-2xl"></p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm overflow-x-auto">
+        <div id="nav-tabs" class="max-w-5xl mx-auto flex">
+            <!-- Populated by JS from COURSE_CONFIG.tabs -->
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-5xl mx-auto w-full p-6 py-8">
+
+        <!-- OVERVIEW TAB -->
+        <div id="home" class="tab-content active space-y-8">
+            <section class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h2 class="text-2xl font-bold text-black mb-4 border-b pb-2">Course Objectives</h2>
+                <p id="overview-description" class="text-gray-700 mb-4 leading-relaxed"></p>
+
+                <h3 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Intended Learning Outcomes:</h3>
+                <ul id="overview-outcomes" class="list-disc pl-6 space-y-2 text-gray-700">
+                    <!-- Populated by JS -->
+                </ul>
+            </section>
+
+            <section id="staff-container" class="grid md:grid-cols-2 gap-6">
+                <!-- Populated by JS -->
+            </section>
+        </div>
+
+        <!-- SCHEDULE TAB -->
+        <div id="schedule" class="tab-content">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div class="p-6 border-b border-gray-200 bg-gray-50">
+                    <h2 class="text-2xl font-bold text-black">Tentative Teaching Schedule</h2>
+                    <p id="schedule-note" class="text-gray-600 mt-1"></p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr id="schedule-head" class="bg-gray-100 text-gray-700 text-sm uppercase tracking-wider">
+                                <!-- Populated by JS -->
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700 divide-y divide-gray-200" id="schedule-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASSESSMENTS TAB -->
+        <div id="assessments" class="tab-content space-y-6">
+            <h2 id="assessments-heading" class="text-2xl font-bold text-black mb-6"></h2>
+
+            <div class="grid gap-4" id="assessments-container">
+                <!-- Populated by JS -->
+            </div>
+
+            <div id="plagiarism-notice"
+                class="mt-8 bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-r-lg shadow-sm">
+                <h3 class="text-lg font-bold text-yellow-800 flex items-center gap-2 mb-2">
+                    <i class="fas fa-exclamation-triangle"></i> Plagiarism Warning
+                </h3>
+                <p id="plagiarism-text" class="text-yellow-900 text-sm leading-relaxed"></p>
+            </div>
+        </div>
+
+        <!-- SLIDES TAB -->
+        <div id="slides" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h2 id="slides-heading" class="text-2xl font-bold text-black mb-2">Lecture &amp; Tutorial Slides</h2>
+                <p id="slides-note" class="text-gray-600 mb-6"></p>
+                <div id="slides-extra" class="mb-6"></div>
+                <div id="slides-container" class="grid gap-3">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div id="slides-preview-panel" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 border-b border-gray-200 bg-gray-50">
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Preview</p>
+                        <p id="slides-preview-title" class="font-semibold text-gray-800 truncate">Select a lecture to
+                            preview</p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <a id="slides-preview-open" href="#" target="_blank" rel="noopener noreferrer"
+                            class="hidden text-sm font-medium text-black hover:underline px-3 py-2">
+                            <i class="fas fa-external-link-alt mr-1"></i> Open full screen
+                        </a>
+                        <button type="button" id="slides-preview-close"
+                            class="hidden text-sm text-gray-500 hover:text-black px-3 py-2">
+                            Close
+                        </button>
+                    </div>
+                </div>
+                <div id="slides-preview-empty"
+                    class="aspect-video bg-gray-100 flex items-center justify-center text-gray-500 text-sm p-6 text-center">
+                    Click <span class="font-semibold mx-1">Preview</span> on a week in the list above to view slides
+                    here.
+                </div>
+                <iframe id="slides-preview-frame" title="Slide preview"
+                    class="hidden w-full aspect-video bg-black border-0" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <!-- RESOURCES TAB -->
+        <div id="resources" class="tab-content space-y-8">
+            <section id="resources-downloads"
+                class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 border-t-4 border-t-black">
+                <!-- Populated by JS -->
+            </section>
+
+            <div class="grid md:grid-cols-1 gap-6">
+                <section class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
+                        <i class="fas fa-laptop-code text-gray-600"></i> Software Requirements
+                    </h3>
+                    <ul id="software-list" class="space-y-3 text-sm text-gray-700">
+                        <!-- Populated by JS -->
+                    </ul>
+                </section>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm mt-auto">
+        <p id="footer-copyright"></p>
+        <p id="footer-course" class="mt-1"></p>
+    </footer>
+
+    <script>
+        /* ============================================================
+           COURSE_CONFIG — edit this block for each new course website
+           ============================================================ */
+        const COURSE_CONFIG = {
+            // --- Identity ---
+            codes: "SSHD5014",
+            title: "User-centred Design in Digital Media",
+            institution: "PolyU CPCE / HKCC",
+            semester: "Semester One, 2026/2027",
+            tagline: "Apply user-centred design and Design Thinking to digital media — from HCI principles and user research to high-fidelity prototyping and usability testing.",
+
+            // --- Tabs ---
+            tabs: [
+                { id: "home", label: "Overview", icon: "fas fa-info-circle", enabled: true },
+                { id: "schedule", label: "Schedule", icon: "fas fa-calendar-alt", enabled: true },
+                { id: "assessments", label: "Assessments", icon: "fas fa-file-alt", enabled: true },
+                { id: "slides", label: "Slides", icon: "fas fa-images", enabled: true },
+                { id: "resources", label: "Resources", icon: "fas fa-download", enabled: true }
+            ],
+
+            // --- Overview ---
+            overview: {
+                description: "The subject aims to equip students with knowledge of user-centred design (UCD) methodologies within the context of contemporary digital media and with international cultural awareness. Students will analyse current trends in Human-Computer Interaction (HCI) and develop practical skills within the Design Thinking framework. The subject focuses on identifying user pain points through rigorous cultural studies, generating solutions using industry-standard tools and prototyping methods, examining their cultural values, and validating them through user testing to solve human-centric problems.",
+                outcomes: [
+                    "Analyse current trends and principles of UCD, including visibility, accessibility, and legibility, within digital culture.",
+                    "Apply advanced user research methods to identify user needs and pain points.",
+                    "Construct high-fidelity interactive prototypes using industry-standard design tools to solve specific user problems.",
+                    "Evaluate design solutions through iterative usability testing and heuristic evaluation, synthesising feedback into executable design plans."
+                ]
+            },
+
+            // --- Staff ---
+            staff: [
+                {
+                    role: "Subject Leader",
+                    name: "CHAN, Long-fung Lazarus",
+                    email: "lazarus.chan@cpce-polyu.edu.hk",
+                    icon: "fas fa-user-tie"
+                },
+                {
+                    role: "Subject Lecturer",
+                    name: "CHAN, Long-fung Lazarus",
+                    email: "lazarus.chan@cpce-polyu.edu.hk",
+                    icon: "fas fa-chalkboard-teacher"
+                }
+            ],
+
+            // --- Schedule ---
+            schedule: {
+                note: "1 hour of lecture & 2 hours of tutorial per week. Studio work uses industry-standard design tools (e.g. Figma).",
+                columns: [
+                    { key: "week", label: "Wk", className: "w-16 text-center" },
+                    { key: "lecture", label: "Lecture", className: "" },
+                    { key: "tutorial", label: "Tutorial", className: "" },
+                    { key: "remarks", label: "Remarks", className: "w-36", highlight: true }
+                ],
+                rows: [
+                    { week: 1, lecture: "Introduction to user-centred design: subject requirements; Design Thinking overview; digital media contexts", tutorial: "Orientation to design workflow: review of selected digital media examples; initial discussion of user problems", remarks: "" },
+                    { week: 2, lecture: "Foundations of UCD: evolution of human-centred design; relationship between UCD and HCI; interaction design principles", tutorial: "Case analysis of digital platforms: visibility; feedback; constraints and affordance", remarks: "" },
+                    { week: 3, lecture: "HCI principles in digital culture: visibility and feedback; accessibility and legibility; constraints and affordance", tutorial: "Interface critique exercise: accessibility audit; legibility review; short analytical notes", remarks: "" },
+                    { week: 4, lecture: "Digital accessibility and inclusive design: WCAG awareness; inclusive design principles; cultural and international UX considerations", tutorial: "Accessibility review of existing media platforms; group discussion of cultural values; identification of user barriers", remarks: "" },
+                    { week: 5, lecture: "User research methods: ethnographic research; contextual inquiry; observation and interview techniques", tutorial: "Planning a user research activity: interview question drafting; consent preparation; observation notes", remarks: "Assignment 1 Due" },
+                    { week: 6, lecture: "Survey design: data collection; affinity mapping; synthesis of research findings", tutorial: "Conducting small-scale user research: research activity execution; coding findings; affinity mapping workshop", remarks: "" },
+                    { week: 7, lecture: "Personas, empathy maps, user journey maps, and problem statements", tutorial: "Persona creation: empathy map exercise; user journey mapping; chosen problem area analysis", remarks: "" },
+                    { week: 8, lecture: "Ideation methods: brainstorming; SCAMPER; concept generation and selection criteria", tutorial: "Ideation workshop: concept sketching; solution development; peer comments on proposed solutions", remarks: "" },
+                    { week: 9, lecture: "Wireframing fundamentals: low-fidelity to mid-fidelity design; layout and hierarchy; content structure", tutorial: "Wireframing workshop using industry-standard tools: layout review; task flow alignment", remarks: "" },
+                    { week: 10, lecture: "High-fidelity prototyping: design systems; style guides; micro-interactions and transitions", tutorial: "High-fidelity prototype development: components and styles; transitions; clickable flows", remarks: "" },
+                    { week: 11, lecture: "Information Architecture: card sorting; site maps; navigation structures and user flows", tutorial: "Card sorting exercise: site map development; drafting user flows for selected tasks", remarks: "Assignment 2 Due" },
+                    { week: 12, lecture: "Usability testing: heuristic evaluation; test task planning; recording user feedback", tutorial: "Usability testing workshop: peer testing; heuristic evaluation checklist; feedback synthesis", remarks: "" },
+                    { week: 13, lecture: "Final Presentation", tutorial: "Final Presentation", remarks: "Group Project Due" }
+                ]
+            },
+
+            // --- Assessments ---
+            assessments: {
+                heading: "Continuous Assessment (100%)",
+                items: [
+                    {
+                        name: "Individual Assignment 1 — Analytical Essay",
+                        weight: "20%",
+                        desc: "Write a critical analytical essay examining current trends and principles of UCD — such as visibility, accessibility, and legibility — within digital culture, drawing on real-world examples and academic or industry sources.",
+                        deadline: "Due Week 5 · PDF/DOCX via Blackboard",
+                        requirements: [
+                            "Clear argument: focused thesis about UCD principles in contemporary digital media.",
+                            "Conceptual depth: discuss visibility, feedback, accessibility, legibility, constraints, affordance, and inclusive design.",
+                            "Evidence and examples: support analysis with specific digital platforms, interfaces, or services.",
+                            "Length ~1,500–2,000 words; APA 7 referencing with at least five sources."
+                        ]
+                    },
+                    {
+                        name: "Individual Assignment 2 — High-fidelity Interactive Prototype",
+                        weight: "40%",
+                        desc: "Apply user research methods to identify user needs and pain points, then construct a high-fidelity interactive prototype using an industry-standard design tool (e.g. Figma) that addresses a clearly defined user problem.",
+                        deadline: "Due Week 11 · ZIP/URL via Blackboard",
+                        requirements: [
+                            "User research: at least two activities (interviews, observations, or surveys) with documented findings.",
+                            "Problem definition: clear user problem or pain point supported by research evidence.",
+                            "High-fidelity prototype: interactive design with visual consistency and clickable flows.",
+                            "Submit: shareable prototype link, research/design rationale PDF, and 1–2 min video walkthrough."
+                        ]
+                    },
+                    {
+                        name: "Group Project — Design Solution",
+                        weight: "40%",
+                        desc: "Apply the full user-centred Design Thinking framework to conduct user research, construct an interactive prototype, and evaluate the design solution through usability testing and heuristic evaluation.",
+                        deadline: "Due Week 13 · ZIP/URL via Blackboard · in-class presentation",
+                        requirements: [
+                            "Problem framing grounded in user research and cultural context.",
+                            "Research and synthesis: personas or empathy maps and actionable insights.",
+                            "Interactive prototype demonstrating key user flows.",
+                            "Usability testing and heuristic evaluation with synthesised feedback; group report and presentation."
+                        ]
+                    }
+                ],
+                plagiarism: "You are strongly advised to pay attention to the rules and guidance notes regarding plagiarism, how sources should be referred to, and bibliography referencing as stipulated in the Student Handbook. The College may take disciplinary actions against students when there is evidence of collusion. All included work of others must be attributed to its source. Extensive copy-pasting from AI-generated content without citation is considered plagiarism."
+            },
+
+            // --- Slides ---
+            slides: {
+                heading: "Lecture Slides",
+                note: "Use Preview to view a deck in the window below, or Open for a full-page view. Arrow keys navigate slides inside the preview.",
+                extras: [],
+                weeks: [
+                    { week: 1, title: "Introduction to user-centred design", lectureUrl: "slides/week-01.html" },
+                    { week: 2, title: "Foundations of UCD", lectureUrl: "slides/week-02.html" },
+                    { week: 3, title: "HCI principles in digital culture", lectureUrl: "slides/week-03.html" },
+                    { week: 4, title: "Digital accessibility and inclusive design", lectureUrl: "slides/week-04.html" },
+                    { week: 5, title: "User research methods", lectureUrl: "slides/week-05.html" },
+                    { week: 6, title: "Survey design", lectureUrl: "slides/week-06.html" },
+                    { week: 7, title: "Personas, empathy maps, journey maps & problem statements", lectureUrl: "slides/week-07.html" },
+                    { week: 8, title: "Ideation methods", lectureUrl: "slides/week-08.html" },
+                    { week: 9, title: "Wireframing fundamentals", lectureUrl: "slides/week-09.html" },
+                    { week: 10, title: "High-fidelity prototyping", lectureUrl: "slides/week-10.html" },
+                    { week: 11, title: "Information Architecture", lectureUrl: "slides/week-11.html" },
+                    { week: 12, title: "Usability testing", lectureUrl: "slides/week-12.html" },
+                    { week: 13, title: "Final Presentation", note: "No lecture deck — final presentations" }
+                ]
+            },
+
+            // --- Resources ---
+            resources: {
+                badge: "Course Materials",
+                title: "Lecture Slides & Studio Tools",
+                description: "Open HTML lecture slides covering UCD foundations, HCI, accessibility, user research, personas, ideation, wireframing, high-fidelity prototyping, information architecture, and usability testing.",
+                repoUrl: "",
+                repoLabel: "",
+                downloads: [],
+                software: [
+                    "Figma (or equivalent industry-standard UI prototyping tool)",
+                    "Web browser for research, testing, and prototype sharing",
+                    "Optional: Miro / Mural (or equivalent) for affinity mapping and workshop collaboration",
+                    "Optional: screen recording tool for prototype walkthroughs"
+                ]
+            },
+
+            // --- Footer ---
+            footer: {
+                copyright: "© 2026/2027 PolyU CPCE."
+            }
+        };
+
+        /* ============================================================
+           Renderer — do not edit unless extending the template
+           ============================================================ */
+        (function renderCourseSite(config) {
+            const fullName = `${config.codes} ${config.title}`;
+
+            document.title = fullName;
+            document.getElementById("header-eyebrow").textContent =
+                `${config.institution} (${config.semester})`;
+            document.getElementById("header-title").innerHTML =
+                `${escapeHtml(config.codes)}<br><span class="text-gray-300">${escapeHtml(config.title)}</span>`;
+            document.getElementById("header-tagline").textContent = config.tagline;
+
+            // Tabs
+            const enabledTabs = config.tabs.filter(t => t.enabled !== false);
+            const nav = document.getElementById("nav-tabs");
+            nav.innerHTML = "";
+            enabledTabs.forEach((tab, index) => {
+                const btn = document.createElement("button");
+                btn.id = `btn-${tab.id}`;
+                btn.className = [
+                    "tab-btn flex items-center gap-2 px-6 py-4 font-medium text-sm transition-colors whitespace-nowrap border-b-2",
+                    index === 0
+                        ? "border-black text-black"
+                        : "text-gray-500 hover:text-black hover:bg-gray-50 border-transparent"
+                ].join(" ");
+                btn.innerHTML = `<i class="${tab.icon}"></i> ${escapeHtml(tab.label)}`;
+                btn.addEventListener("click", () => switchTab(tab.id));
+                nav.appendChild(btn);
+
+                const panel = document.getElementById(tab.id);
+                if (panel) {
+                    panel.classList.toggle("active", index === 0);
+                    panel.style.display = ""; // rely on CSS .active
+                }
+            });
+
+            // Hide disabled tab panels
+            config.tabs.forEach(tab => {
+                const panel = document.getElementById(tab.id);
+                if (panel && tab.enabled === false) {
+                    panel.remove();
+                }
+            });
+
+            // Overview
+            document.getElementById("overview-description").textContent = config.overview.description;
+            const outcomes = document.getElementById("overview-outcomes");
+            outcomes.innerHTML = "";
+            config.overview.outcomes.forEach(text => {
+                const li = document.createElement("li");
+                li.textContent = text;
+                outcomes.appendChild(li);
+            });
+
+            // Staff
+            const staffContainer = document.getElementById("staff-container");
+            staffContainer.innerHTML = "";
+            config.staff.forEach(person => {
+                const card = document.createElement("div");
+                card.className = "bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex items-start gap-4";
+                const officeHtml = person.office
+                    ? `<p class="text-sm text-gray-500 mt-1"><i class="fas fa-map-marker-alt w-4"></i> Office: ${escapeHtml(person.office)}</p>`
+                    : "";
+                const emailHtml = person.email
+                    ? `<p class="text-sm text-black mt-1"><i class="fas fa-envelope w-4"></i> ${escapeHtml(person.email)}</p>`
+                    : "";
+                card.innerHTML = `
+                    <div class="bg-gray-100 p-3 rounded-full text-black"><i class="${person.icon || "fas fa-user"} fa-lg"></i></div>
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-800">${escapeHtml(person.role)}</h3>
+                        <p class="text-gray-700 font-medium">${escapeHtml(person.name)}</p>
+                        ${officeHtml}
+                        ${emailHtml}
+                    </div>
+                `;
+                staffContainer.appendChild(card);
+            });
+
+            // Schedule
+            document.getElementById("schedule-note").textContent = config.schedule.note;
+            const scheduleHead = document.getElementById("schedule-head");
+            scheduleHead.innerHTML = "";
+            config.schedule.columns.forEach(col => {
+                const th = document.createElement("th");
+                th.className = `p-4 border-b font-semibold ${col.className || ""}`;
+                th.textContent = col.label;
+                scheduleHead.appendChild(th);
+            });
+
+            const scheduleBody = document.getElementById("schedule-body");
+            scheduleBody.innerHTML = "";
+            config.schedule.rows.forEach(row => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-gray-50 transition-colors";
+                tr.innerHTML = config.schedule.columns.map(col => {
+                    const value = row[col.key] ?? "";
+                    const extra = col.highlight
+                        ? "font-bold text-yellow-600 text-sm"
+                        : (col.key === "week" ? "text-center font-medium" : "");
+                    return `<td class="p-4 border-b ${extra}">${escapeHtml(String(value))}</td>`;
+                }).join("");
+                scheduleBody.appendChild(tr);
+            });
+
+            // Assessments
+            document.getElementById("assessments-heading").textContent = config.assessments.heading;
+            const assessmentsContainer = document.getElementById("assessments-container");
+            assessmentsContainer.innerHTML = "";
+            config.assessments.items.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "bg-white p-6 rounded-lg shadow-sm border border-gray-200";
+                const requirements = (item.requirements || []).map(r =>
+                    `<li class="text-sm text-gray-700">${escapeHtml(r)}</li>`
+                ).join("");
+                const requirementsHtml = requirements
+                    ? `<ul class="list-disc pl-5 mt-3 space-y-1">${requirements}</ul>`
+                    : "";
+                const deadlineHtml = item.deadline
+                    ? `<p class="text-sm font-semibold text-yellow-700 mt-2"><i class="fas fa-clock mr-1"></i>${escapeHtml(item.deadline)}</p>`
+                    : "";
+                const downloadHtml = item.downloadUrl
+                    ? `<a href="${escapeAttr(item.downloadUrl)}" class="inline-flex items-center gap-2 mt-4 text-sm font-medium text-black hover:underline">
+                            <i class="fas fa-file-pdf"></i> ${escapeHtml(item.downloadLabel || "Download brief (PDF)")}
+                       </a>`
+                    : "";
+                div.innerHTML = `
+                    <div class="flex flex-col md:flex-row md:items-start gap-4">
+                        <div class="bg-gray-100 text-black font-bold text-2xl p-4 rounded-lg text-center min-w-[100px]">
+                            ${escapeHtml(item.weight)}
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-gray-800 mb-1">${escapeHtml(item.name)}</h3>
+                            <p class="text-gray-600">${escapeHtml(item.desc)}</p>
+                            ${deadlineHtml}
+                            ${requirementsHtml}
+                            ${downloadHtml}
+                        </div>
+                    </div>
+                `;
+                assessmentsContainer.appendChild(div);
+            });
+
+            if (config.assessments.plagiarism) {
+                document.getElementById("plagiarism-text").textContent = config.assessments.plagiarism;
+            } else {
+                document.getElementById("plagiarism-notice").remove();
+            }
+
+            // Slides
+            if (config.slides) {
+                const slidesHeading = document.getElementById("slides-heading");
+                const slidesNote = document.getElementById("slides-note");
+                const slidesExtra = document.getElementById("slides-extra");
+                const slidesContainer = document.getElementById("slides-container");
+                const previewTitle = document.getElementById("slides-preview-title");
+                const previewFrame = document.getElementById("slides-preview-frame");
+                const previewEmpty = document.getElementById("slides-preview-empty");
+                const previewOpen = document.getElementById("slides-preview-open");
+                const previewClose = document.getElementById("slides-preview-close");
+
+                function loadSlidePreview(url, label) {
+                    if (!previewFrame || !url) return;
+                    if (previewTitle) previewTitle.textContent = label || "Slide preview";
+                    if (previewEmpty) previewEmpty.classList.add("hidden");
+                    previewFrame.classList.remove("hidden");
+                    previewFrame.src = url;
+                    if (previewOpen) {
+                        previewOpen.href = url;
+                        previewOpen.classList.remove("hidden");
+                    }
+                    if (previewClose) previewClose.classList.remove("hidden");
+                    const panel = document.getElementById("slides-preview-panel");
+                    if (panel) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                }
+
+                function clearSlidePreview() {
+                    if (previewFrame) {
+                        previewFrame.src = "about:blank";
+                        previewFrame.classList.add("hidden");
+                    }
+                    if (previewEmpty) previewEmpty.classList.remove("hidden");
+                    if (previewTitle) previewTitle.textContent = "Select a lecture to preview";
+                    if (previewOpen) {
+                        previewOpen.href = "#";
+                        previewOpen.classList.add("hidden");
+                    }
+                    if (previewClose) previewClose.classList.add("hidden");
+                }
+
+                if (previewClose) {
+                    previewClose.addEventListener("click", clearSlidePreview);
+                }
+
+                if (slidesHeading && config.slides.heading) slidesHeading.textContent = config.slides.heading;
+                if (slidesNote) slidesNote.textContent = config.slides.note || "";
+                if (slidesExtra) {
+                    slidesExtra.innerHTML = "";
+                    (config.slides.extras || []).forEach(extra => {
+                        const wrap = document.createElement("div");
+                        wrap.className = "inline-flex flex-wrap gap-2 mr-2 mb-2";
+                        const previewBtn = document.createElement("button");
+                        previewBtn.type = "button";
+                        previewBtn.className = "inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white px-4 py-3 rounded font-medium text-sm transition-colors";
+                        previewBtn.innerHTML = `<i class="${extra.icon || "fas fa-book"}"></i> ${escapeHtml(extra.label)}`;
+                        previewBtn.addEventListener("click", () => loadSlidePreview(extra.url, extra.label));
+                        const openLink = document.createElement("a");
+                        openLink.href = extra.url;
+                        openLink.target = "_blank";
+                        openLink.rel = "noopener noreferrer";
+                        openLink.className = "inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 px-4 py-3 rounded font-medium text-sm transition-colors";
+                        openLink.innerHTML = `<i class="fas fa-external-link-alt"></i> Open`;
+                        wrap.appendChild(previewBtn);
+                        wrap.appendChild(openLink);
+                        slidesExtra.appendChild(wrap);
+                    });
+                }
+                if (slidesContainer) {
+                    slidesContainer.innerHTML = "";
+                    (config.slides.weeks || []).forEach(week => {
+                        const row = document.createElement("div");
+                        row.className = "flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border border-gray-200 rounded-lg bg-gray-50";
+                        const label = `Week ${week.week} — ${week.title}`;
+                        const actions = document.createElement("div");
+                        actions.className = "flex items-center flex-wrap gap-2";
+
+                        if (week.lectureUrl) {
+                            const previewBtn = document.createElement("button");
+                            previewBtn.type = "button";
+                            previewBtn.className = "text-sm font-medium bg-black text-white hover:bg-gray-800 px-3 py-1.5 rounded whitespace-nowrap";
+                            previewBtn.innerHTML = `<i class="fas fa-eye mr-1"></i>Preview`;
+                            previewBtn.addEventListener("click", () => loadSlidePreview(week.lectureUrl, label));
+                            actions.appendChild(previewBtn);
+
+                            const openLink = document.createElement("a");
+                            openLink.href = week.lectureUrl;
+                            openLink.target = "_blank";
+                            openLink.rel = "noopener noreferrer";
+                            openLink.className = "text-sm font-medium text-black hover:underline whitespace-nowrap px-1";
+                            openLink.innerHTML = `<i class="fas fa-chalkboard mr-1"></i>Open`;
+                            actions.appendChild(openLink);
+                        }
+                        if (week.tutorialUrl) {
+                            const tutBtn = document.createElement("button");
+                            tutBtn.type = "button";
+                            tutBtn.className = "text-sm font-medium text-black hover:underline whitespace-nowrap";
+                            tutBtn.innerHTML = `<i class="fas fa-laptop-code mr-1"></i>Tutorial`;
+                            tutBtn.addEventListener("click", () => loadSlidePreview(week.tutorialUrl, `${label} (Tutorial)`));
+                            actions.appendChild(tutBtn);
+                        }
+                        if (week.note && !week.lectureUrl && !week.tutorialUrl) {
+                            const note = document.createElement("span");
+                            note.className = "text-sm text-gray-500 italic";
+                            note.textContent = week.note;
+                            actions.appendChild(note);
+                        } else if (!week.lectureUrl && !week.tutorialUrl && !week.note) {
+                            const soon = document.createElement("span");
+                            soon.className = "text-sm text-gray-400";
+                            soon.textContent = "Coming soon";
+                            actions.appendChild(soon);
+                        } else if (week.note && (week.lectureUrl || week.tutorialUrl)) {
+                            const note = document.createElement("span");
+                            note.className = "text-sm text-gray-500 italic";
+                            note.textContent = week.note;
+                            actions.appendChild(note);
+                        }
+
+                        row.innerHTML = `
+                            <div>
+                                <span class="inline-block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Week ${escapeHtml(String(week.week))}</span>
+                                <h3 class="font-semibold text-gray-800">${escapeHtml(week.title)}</h3>
+                            </div>
+                        `;
+                        row.appendChild(actions);
+                        slidesContainer.appendChild(row);
+                    });
+                }
+            }
+
+            // Resources
+            const downloadsSection = document.getElementById("resources-downloads");
+            const downloadsHtml = (config.resources.downloads || []).map(file => `
+                <a href="${escapeAttr(file.url)}" class="bg-black hover:bg-gray-800 text-white px-4 py-3 rounded font-medium text-sm transition-colors flex items-center justify-between shadow-sm">
+                    <span class="flex items-center gap-2"><i class="${file.icon || "fas fa-download"}"></i> ${escapeHtml(file.label)}</span>
+                    <i class="fas fa-download"></i>
+                </a>
+            `).join("");
+
+            const repoHtml = config.resources.repoUrl
+                ? `<a href="${escapeAttr(config.resources.repoUrl)}" target="_blank" rel="noopener noreferrer" class="mt-2 bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 px-4 py-2 rounded font-medium text-sm transition-colors flex items-center justify-center gap-2 shadow-sm">
+                        <i class="fas fa-book-open"></i> ${escapeHtml(config.resources.repoLabel || "View Full Repository on GitHub")}
+                   </a>`
+                : "";
+
+            downloadsSection.innerHTML = `
+                <div class="flex items-start gap-4">
+                    <div class="bg-gray-100 p-4 rounded-lg text-black hidden sm:block">
+                        <i class="fas fa-folder-open fa-2x"></i>
+                    </div>
+                    <div class="w-full">
+                        <span class="inline-block px-2 py-1 bg-gray-200 text-gray-800 text-xs font-bold rounded mb-2">${escapeHtml(config.resources.badge || "Resources")}</span>
+                        <h2 class="text-xl font-bold text-gray-800 mb-2">${escapeHtml(config.resources.title)}</h2>
+                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">${escapeHtml(config.resources.description)}</p>
+                        <div class="flex flex-col gap-3 w-full max-w-md">
+                            ${downloadsHtml}
+                            ${repoHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const softwareList = document.getElementById("software-list");
+            softwareList.innerHTML = "";
+            (config.resources.software || []).forEach(item => {
+                const li = document.createElement("li");
+                li.className = "flex items-center gap-2";
+                li.innerHTML = `<i class="fas fa-check text-black"></i> ${escapeHtml(item)}`;
+                softwareList.appendChild(li);
+            });
+
+            // Footer
+            document.getElementById("footer-copyright").textContent =
+                config.footer.copyright || `© ${config.semester} ${config.institution}.`;
+            document.getElementById("footer-course").textContent =
+                config.footer.course || fullName;
+        })(COURSE_CONFIG);
+
+        function switchTab(tabId) {
+            document.querySelectorAll(".tab-content").forEach(el => {
+                el.classList.remove("active");
+            });
+            const panel = document.getElementById(tabId);
+            if (panel) panel.classList.add("active");
+
+            document.querySelectorAll(".tab-btn").forEach(btn => {
+                btn.classList.remove("border-black", "text-black");
+                btn.classList.add("text-gray-500", "border-transparent");
+            });
+
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove("text-gray-500", "border-transparent");
+                activeBtn.classList.add("border-black", "text-black");
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+
+        function escapeAttr(str) {
+            return escapeHtml(str).replace(/'/g, "&#39;");
+        }
+    </script>
+</body>
+
+</html>

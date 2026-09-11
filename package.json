@@ -1,0 +1,16 @@
+{
+  "name": "sshd5014-user-centred-design",
+  "version": "1.0.0",
+  "description": "SSHD5014 User-centred Design in Digital Media course website",
+  "main": "index.js",
+  "scripts": {
+    "export-slides": "./export-slides.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@marp-team/marp-cli": "^4.5.1"
+  }
+}
