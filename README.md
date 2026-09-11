@@ -32,7 +32,7 @@ Pushes to [2026-1-SSHD5014-USER-CENTRED-DESIGN-IN-DIGITAL-MEDIA-Group-A01-](http
 
 1. Create a new empty GitHub repository (or use the existing Group-A01 repo).
 2. Upload **the contents of this folder** as the repo root (not the parent `Github/` folder).
-   - Include: `index.html`, `auth.js`, `.nojekyll`, `assets/`, `slides/`, `README.md`
+   - Include: `index.html`, `auth.js`, `.nojekyll`, `assets/`, `slides/`, `readings/`, `README.md`
    - Do **not** upload `node_modules/`
 3. In the repo: **Settings → Pages → Build and deployment**
    - Source: **Deploy from a branch**
@@ -53,6 +53,7 @@ python3 -m http.server 8080
 Visit `http://localhost:8080`.
 
 - Lecture decks: [`slides/week-01.html`](slides/week-01.html) … [`slides/week-12.html`](slides/week-12.html)
+- Readings: [`readings/`](readings/) (weekly PDFs; see **Reading** and **Resources** tabs on the site)
 
 ## Rebuild slides from Marp sources (maintainers)
 
@@ -78,4 +79,7 @@ SSHD5014/
   assets/briefs/          Assessment briefs (optional)
   slides/
     week-01.html … week-12.html   (self-contained)
+  readings/
+    *.pdf                 Assigned reading PDFs
+    README.md             Week-by-week page map
 ```

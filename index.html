@@ -110,7 +110,7 @@
             </div>
         </div>
 
-        <!-- SLIDES TAB -->
+            <!-- SLIDES TAB -->
         <div id="slides" class="tab-content space-y-6">
             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                 <h2 id="slides-heading" class="text-2xl font-bold text-black mb-2">Lecture &amp; Tutorial Slides</h2>
@@ -147,6 +147,25 @@
                 </div>
                 <iframe id="slides-preview-frame" title="Slide preview"
                     class="hidden w-full aspect-video bg-black border-0" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <!-- READING TAB -->
+        <div id="reading" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h2 id="reading-heading" class="text-2xl font-bold text-black mb-2">Weekly Readings</h2>
+                <p id="reading-note" class="text-gray-600 mb-6"></p>
+                <div id="reading-container" class="grid gap-3">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div id="reading-library" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Library-only (recommended)</h3>
+                <p class="text-gray-600 text-sm mb-4">Full textbooks stay on the university library — not hosted here.</p>
+                <ul id="reading-library-list" class="space-y-2 text-sm text-gray-700">
+                    <!-- Populated by JS -->
+                </ul>
             </div>
         </div>
 
@@ -195,6 +214,7 @@
                 { id: "schedule", label: "Schedule", icon: "fas fa-calendar-alt", enabled: true },
                 { id: "assessments", label: "Assessments", icon: "fas fa-file-alt", enabled: true },
                 { id: "slides", label: "Slides", icon: "fas fa-images", enabled: true },
+                { id: "reading", label: "Reading", icon: "fas fa-book-open", enabled: true },
                 { id: "resources", label: "Resources", icon: "fas fa-download", enabled: true }
             ],
 
@@ -317,14 +337,141 @@
                 ]
             },
 
+            // --- Reading ---
+            reading: {
+                heading: "Weekly Readings",
+                note: "Each lecture week has at most 7 PDF pages to read together in class with the lecture slides. Page numbers are the PDF viewer page numbers (1 = first page of the file). Download full PDFs from the Resources tab.",
+                weeks: [
+                    {
+                        week: 1,
+                        title: "Introduction to UCD",
+                        pages: "1–7",
+                        files: [
+                            { label: "Myers1998_BriefHistoryHCI.pdf", url: "readings/Myers1998_BriefHistoryHCI.pdf", pages: "1–7" }
+                        ]
+                    },
+                    {
+                        week: 2,
+                        title: "Foundations of UCD",
+                        pages: "6–7, 11–13",
+                        files: [
+                            { label: "ISO9241-210_2019_sample.pdf", url: "readings/ISO9241-210_2019_sample.pdf", pages: "6–7, 11–13" }
+                        ]
+                    },
+                    {
+                        week: 3,
+                        title: "HCI principles in digital culture",
+                        pages: "1–7",
+                        files: [
+                            { label: "Nielsen1994_EnhancingExplanatoryPowerUsabilityHeuristics.pdf", url: "readings/Nielsen1994_EnhancingExplanatoryPowerUsabilityHeuristics.pdf", pages: "1–7" }
+                        ]
+                    },
+                    {
+                        week: 4,
+                        title: "Digital accessibility and inclusive design",
+                        pages: "8–14",
+                        files: [
+                            { label: "Microsoft_InclusiveDesign_Manual.pdf", url: "readings/Microsoft_InclusiveDesign_Manual.pdf", pages: "8–14" }
+                        ]
+                    },
+                    {
+                        week: 5,
+                        title: "User research methods",
+                        pages: "2–3, 8–10",
+                        files: [
+                            { label: "DOE2017_UsabilityGuidebook.pdf", url: "readings/DOE2017_UsabilityGuidebook.pdf", pages: "2–3, 8–10" }
+                        ]
+                    },
+                    {
+                        week: 6,
+                        title: "Survey design",
+                        pages: "4–5",
+                        files: [
+                            { label: "DOE2017_UsabilityGuidebook.pdf", url: "readings/DOE2017_UsabilityGuidebook.pdf", pages: "4–5" }
+                        ]
+                    },
+                    {
+                        week: 7,
+                        title: "Personas, journeys & problem statements",
+                        pages: "13–17",
+                        files: [
+                            { label: "DOE2017_UsabilityGuidebook.pdf", url: "readings/DOE2017_UsabilityGuidebook.pdf", pages: "13–17" }
+                        ]
+                    },
+                    {
+                        week: 8,
+                        title: "Ideation methods",
+                        pages: "1–5",
+                        files: [
+                            { label: "Microsoft_ProductInclusionToolkit.pdf", url: "readings/Microsoft_ProductInclusionToolkit.pdf", pages: "1–5" }
+                        ]
+                    },
+                    {
+                        week: 9,
+                        title: "Wireframing fundamentals",
+                        pages: "15–19",
+                        files: [
+                            { label: "DOE2017_UsabilityGuidebook.pdf", url: "readings/DOE2017_UsabilityGuidebook.pdf", pages: "15–19" }
+                        ]
+                    },
+                    {
+                        week: 10,
+                        title: "High-fidelity prototyping",
+                        pages: "2–7",
+                        files: [
+                            { label: "Egger2016_WaitingTimesQoEWebServices.pdf", url: "readings/Egger2016_WaitingTimesQoEWebServices.pdf", pages: "2–7" }
+                        ]
+                    },
+                    {
+                        week: 11,
+                        title: "Information Architecture",
+                        pages: "23–29",
+                        files: [
+                            { label: "DOE2017_UsabilityGuidebook.pdf", url: "readings/DOE2017_UsabilityGuidebook.pdf", pages: "23–29" }
+                        ]
+                    },
+                    {
+                        week: 12,
+                        title: "Usability testing",
+                        pages: "1–5 + 1–2",
+                        files: [
+                            { label: "Nielsen2000_WhyFiveUsers.pdf", url: "readings/Nielsen2000_WhyFiveUsers.pdf", pages: "1–5" },
+                            { label: "Nielsen_Landauer1993_FindingUsabilityProblems.pdf", url: "readings/Nielsen_Landauer1993_FindingUsabilityProblems.pdf", pages: "1–2" }
+                        ]
+                    }
+                ],
+                library: [
+                    { work: "Don Norman, The Design of Everyday Things", week: "2–3" },
+                    { work: "Rosenfeld, Morville & Arango, Information Architecture", week: "11" },
+                    { work: "Alan Cooper et al., About Face", week: "7" },
+                    { work: "Steve Portigal, Interviewing Users", week: "5" },
+                    { work: "Carolyn Snyder, Paper Prototyping", week: "9" },
+                    { work: "Full ISO 9241-210:2019", week: "2" }
+                ]
+            },
+
             // --- Resources ---
             resources: {
                 badge: "Course Materials",
-                title: "Lecture Slides & Studio Tools",
-                description: "Open HTML lecture slides covering UCD foundations, HCI, accessibility, user research, personas, ideation, wireframing, high-fidelity prototyping, information architecture, and usability testing.",
+                title: "Reading PDFs & Studio Tools",
+                description: "Download all assigned reading PDFs below. Weekly page ranges are listed under the Reading tab. Also use industry-standard design tools for studio work.",
                 repoUrl: "",
                 repoLabel: "",
-                downloads: [],
+                downloads: [
+                    { label: "Myers1998_BriefHistoryHCI.pdf", url: "readings/Myers1998_BriefHistoryHCI.pdf", icon: "fas fa-file-pdf" },
+                    { label: "Myers1996_BriefHistoryHCI_techreport.pdf", url: "readings/Myers1996_BriefHistoryHCI_techreport.pdf", icon: "fas fa-file-pdf" },
+                    { label: "ISO9241-210_2019_sample.pdf", url: "readings/ISO9241-210_2019_sample.pdf", icon: "fas fa-file-pdf" },
+                    { label: "Nielsen1994_EnhancingExplanatoryPowerUsabilityHeuristics.pdf", url: "readings/Nielsen1994_EnhancingExplanatoryPowerUsabilityHeuristics.pdf", icon: "fas fa-file-pdf" },
+                    { label: "Microsoft_InclusiveDesign_Manual.pdf", url: "readings/Microsoft_InclusiveDesign_Manual.pdf", icon: "fas fa-file-pdf" },
+                    { label: "Microsoft_ProductInclusionToolkit.pdf", url: "readings/Microsoft_ProductInclusionToolkit.pdf", icon: "fas fa-file-pdf" },
+                    { label: "DOE2017_UsabilityGuidebook.pdf", url: "readings/DOE2017_UsabilityGuidebook.pdf", icon: "fas fa-file-pdf" },
+                    { label: "Egger2016_WaitingTimesQoEWebServices.pdf", url: "readings/Egger2016_WaitingTimesQoEWebServices.pdf", icon: "fas fa-file-pdf" },
+                    { label: "Nielsen2000_WhyFiveUsers.pdf", url: "readings/Nielsen2000_WhyFiveUsers.pdf", icon: "fas fa-file-pdf" },
+                    { label: "Nielsen_Landauer1993_FindingUsabilityProblems.pdf", url: "readings/Nielsen_Landauer1993_FindingUsabilityProblems.pdf", icon: "fas fa-file-pdf" },
+                    { label: "Johansson2019_ImprovingPerceivedPerformanceLoadingScreens.pdf", url: "readings/Johansson2019_ImprovingPerceivedPerformanceLoadingScreens.pdf", icon: "fas fa-file-pdf" },
+                    { label: "FMP2020_ImprovingFirstMeaningfulPaint.pdf", url: "readings/FMP2020_ImprovingFirstMeaningfulPaint.pdf", icon: "fas fa-file-pdf" },
+                    { label: "InteractiveLoading2025_WaitingScreensEngagement.pdf", url: "readings/InteractiveLoading2025_WaitingScreensEngagement.pdf", icon: "fas fa-file-pdf" }
+                ],
                 software: [
                     "Figma (or equivalent industry-standard UI prototyping tool)",
                     "Web browser for research, testing, and prototype sharing",
@@ -618,12 +765,68 @@
                 }
             }
 
+            // Reading
+            if (config.reading) {
+                const readingHeading = document.getElementById("reading-heading");
+                const readingNote = document.getElementById("reading-note");
+                const readingContainer = document.getElementById("reading-container");
+                const readingLibraryList = document.getElementById("reading-library-list");
+                const readingLibrarySection = document.getElementById("reading-library");
+
+                if (readingHeading && config.reading.heading) readingHeading.textContent = config.reading.heading;
+                if (readingNote) readingNote.textContent = config.reading.note || "";
+
+                if (readingContainer) {
+                    readingContainer.innerHTML = "";
+                    (config.reading.weeks || []).forEach(week => {
+                        const row = document.createElement("div");
+                        row.className = "flex flex-col sm:flex-row sm:items-start justify-between gap-3 p-4 border border-gray-200 rounded-lg bg-gray-50";
+
+                        const filesHtml = (week.files || []).map(file => `
+                            <a href="${escapeAttr(file.url)}" download
+                                class="text-sm font-medium bg-black text-white hover:bg-gray-800 px-3 py-1.5 rounded whitespace-nowrap inline-flex items-center gap-1">
+                                <i class="fas fa-file-pdf"></i> ${escapeHtml(file.label)}
+                                ${file.pages ? `<span class="opacity-80 font-normal">· pp. ${escapeHtml(file.pages)}</span>` : ""}
+                            </a>
+                        `).join("");
+
+                        row.innerHTML = `
+                            <div class="min-w-0">
+                                <span class="inline-block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Week ${escapeHtml(String(week.week))}</span>
+                                <h3 class="font-semibold text-gray-800">${escapeHtml(week.title)}</h3>
+                                ${week.pages ? `<p class="text-sm text-gray-500 mt-1">In-class pages: ${escapeHtml(week.pages)}</p>` : ""}
+                            </div>
+                            <div class="flex items-center flex-wrap gap-2">${filesHtml}</div>
+                        `;
+                        readingContainer.appendChild(row);
+                    });
+                }
+
+                if (readingLibraryList && readingLibrarySection) {
+                    const libraryItems = config.reading.library || [];
+                    if (libraryItems.length === 0) {
+                        readingLibrarySection.remove();
+                    } else {
+                        readingLibraryList.innerHTML = "";
+                        libraryItems.forEach(item => {
+                            const li = document.createElement("li");
+                            li.className = "flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3";
+                            li.innerHTML = `
+                                <span class="font-medium text-gray-800">${escapeHtml(item.work)}</span>
+                                <span class="text-gray-500">Pair with week ${escapeHtml(item.week)}</span>
+                            `;
+                            readingLibraryList.appendChild(li);
+                        });
+                    }
+                }
+            }
+
             // Resources
             const downloadsSection = document.getElementById("resources-downloads");
             const downloadsHtml = (config.resources.downloads || []).map(file => `
-                <a href="${escapeAttr(file.url)}" class="bg-black hover:bg-gray-800 text-white px-4 py-3 rounded font-medium text-sm transition-colors flex items-center justify-between shadow-sm">
-                    <span class="flex items-center gap-2"><i class="${file.icon || "fas fa-download"}"></i> ${escapeHtml(file.label)}</span>
-                    <i class="fas fa-download"></i>
+                <a href="${escapeAttr(file.url)}" download class="bg-black hover:bg-gray-800 text-white px-4 py-3 rounded font-medium text-sm transition-colors flex items-center justify-between shadow-sm">
+                    <span class="flex items-center gap-2 min-w-0"><i class="${file.icon || "fas fa-download"}"></i> <span class="truncate">${escapeHtml(file.label)}</span></span>
+                    <i class="fas fa-download flex-shrink-0 ml-2"></i>
                 </a>
             `).join("");
 
@@ -642,7 +845,7 @@
                         <span class="inline-block px-2 py-1 bg-gray-200 text-gray-800 text-xs font-bold rounded mb-2">${escapeHtml(config.resources.badge || "Resources")}</span>
                         <h2 class="text-xl font-bold text-gray-800 mb-2">${escapeHtml(config.resources.title)}</h2>
                         <p class="text-gray-600 mb-4 text-sm leading-relaxed">${escapeHtml(config.resources.description)}</p>
-                        <div class="flex flex-col gap-3 w-full max-w-md">
+                        <div class="flex flex-col gap-3 w-full max-w-xl">
                             ${downloadsHtml}
                             ${repoHtml}
                         </div>
