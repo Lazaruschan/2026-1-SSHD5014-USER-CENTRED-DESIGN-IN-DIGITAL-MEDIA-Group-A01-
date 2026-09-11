@@ -207,6 +207,55 @@
                 <!-- Populated by JS -->
             </section>
 
+            <section id="resources-videos" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h3 class="text-lg font-bold text-gray-800 mb-2 border-b pb-2 flex items-center gap-2">
+                    <i class="fab fa-youtube text-red-600"></i> Lecture Videos
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">Videos linked from the weekly slides. Click Play to watch here.</p>
+                <div id="resources-videos-list" class="grid gap-3 mb-4">
+                    <!-- Populated by JS -->
+                </div>
+                <div id="resources-video-player" class="rounded-lg border border-gray-200 overflow-hidden bg-black">
+                    <div
+                        class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 border-b border-gray-700 bg-gray-900 text-white">
+                        <div class="min-w-0">
+                            <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Now playing</p>
+                            <p id="resources-video-title" class="font-semibold truncate">Select a video to play</p>
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <a id="resources-video-open" href="#" target="_blank" rel="noopener noreferrer"
+                                class="hidden text-sm font-medium text-gray-200 hover:text-white px-3 py-2">
+                                <i class="fas fa-external-link-alt mr-1"></i> YouTube
+                            </a>
+                            <button type="button" id="resources-video-close"
+                                class="hidden text-sm text-gray-400 hover:text-white px-3 py-2">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                    <div id="resources-video-empty"
+                        class="aspect-video bg-gray-900 flex items-center justify-center text-gray-400 text-sm p-6 text-center">
+                        Click <span class="font-semibold text-white mx-1">Play</span> on a video above.
+                    </div>
+                    <div id="resources-video-frame-wrap" class="hidden aspect-video bg-black">
+                        <iframe id="resources-video-frame" title="Lecture video player"
+                            class="w-full h-full border-0" allowfullscreen
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                    </div>
+                </div>
+            </section>
+
+            <section id="resources-links" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h3 class="text-lg font-bold text-gray-800 mb-2 border-b pb-2 flex items-center gap-2">
+                    <i class="fas fa-link text-gray-600"></i> Links from Slides
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">Tools, articles, and references cited in the lecture decks.</p>
+                <div id="resources-links-list" class="grid gap-2">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
             <div class="grid md:grid-cols-1 gap-6">
                 <section class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                     <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
@@ -508,6 +557,53 @@
                     "Web browser for research, testing, and prototype sharing",
                     "Optional: Miro / Mural (or equivalent) for affinity mapping and workshop collaboration",
                     "Optional: screen recording tool for prototype walkthroughs"
+                ],
+                videos: [
+                    { week: 1, title: "What is Design Thinking? | IDEO U", youtubeId: "ldYzbV0NDp8" },
+                    { week: 2, title: "Don Norman: The Design of Everyday Things | NNgroup", youtubeId: "_Kc57XAE_V4" },
+                    { week: 3, title: "Affordances | Don Norman (IxDF)", youtubeId: "NK1Zb_5VxuM" },
+                    { week: 4, title: "Accessibility vs. Inclusive Design | NNgroup", youtubeId: "hE83Qn-PTGA" },
+                    { week: 5, title: "Five User Interview Mistakes to Avoid (in 5 Minutes)", youtubeId: "yBYd5USasXg" },
+                    { week: 5, title: "When to Use Which UX Research Method | NNgroup", youtubeId: "OtUWbsvCujM" },
+                    { week: 6, title: "Survey Response Biases in User Research | NNgroup", youtubeId: "zaK4xfAqpY0" },
+                    { week: 6, title: "Affinity Mapping: Organize Your UX Research and Data", youtubeId: "P86AHRyfdjk" },
+                    { week: 7, title: "Customer Journey Mapping 101 | NNgroup", youtubeId: "2W13ext26kQ" },
+                    { week: 8, title: "First Diverge, Then Converge During UX Workshops | NNgroup", youtubeId: "wz3BPs7ZSKc" },
+                    { week: 9, title: "Wireframing & Prototyping (ft. Leon Barnard) | NNgroup", youtubeId: "GaVGu_8CdHY" },
+                    { week: 10, title: "Prototypes vs Wireframes in UX Projects | NNgroup", youtubeId: "miVcrftnhzM" },
+                    { week: 11, title: "Card Sorting: Why & When | NNgroup", youtubeId: "B0IT9gJWpnw" },
+                    { week: 12, title: "Usability Testing 101 | NNgroup", youtubeId: "n8MnoJyl3W4" }
+                ],
+                links: [
+                    { week: 1, label: "IDEO Design Thinking", url: "https://designthinking.ideo.com/" },
+                    { week: 2, label: "7 Principles from The Design of Everyday Things", url: "https://international.binus.ac.id/graphic-design/2022/02/02/7-principles-from-the-design-of-everyday-things/" },
+                    { week: 2, label: "Penpot (open-source design tool)", url: "https://penpot.app/" },
+                    { week: 3, label: "Nielsen Norman Group — Ten Usability Heuristics", url: "https://www.nngroup.com/articles/ten-usability-heuristics/" },
+                    { week: 3, label: "Legibility vs Readability", url: "https://typetype.org/blog/legibility-vs-readability-what-is-the-difference/" },
+                    { week: 3, label: "UI Design: Affordance and Constraints", url: "https://www.scribd.com/document/844235247/UI-Design-Affordance-and-Constraints" },
+                    { week: 3, label: "Excalidraw", url: "https://excalidraw.com/" },
+                    { week: 4, label: "Digital Accessibility vs Inclusive Design", url: "https://www.continualengine.com/blog/digital-accessibility-vs-inclusive-design/" },
+                    { week: 4, label: "A11Y Project Checklist", url: "https://www.a11yproject.com/checklist/" },
+                    { week: 4, label: "WebAIM Contrast Checker", url: "https://webaim.org/resources/contrastchecker/" },
+                    { week: 5, label: "What is User Research", url: "https://www.thisisgain.com/post/what-is-user-research" },
+                    { week: 5, label: "Focus Groups — UX Research Field Guide", url: "https://www.userinterviews.com/ux-research-field-guide-chapter/focus-groups" },
+                    { week: 6, label: "UX Survey Questions", url: "https://userpilot.com/blog/user-experience-survey-questions/" },
+                    { week: 6, label: "Typeform", url: "https://www.typeform.com/" },
+                    { week: 7, label: "User Journey & Persona Templates (URBACT)", url: "https://urbact.eu/user-journey-and-persona-templates-tools-designing-citizen-centred-strategies" },
+                    { week: 8, label: "Miro", url: "https://miro.com/" },
+                    { week: 9, label: "Information Architecture — Beginner’s Guide (MockFlow)", url: "https://mockflow.com/blog/information-architecture-a-beginners-guide" },
+                    { week: 9, label: "Low-fidelity vs High-fidelity Prototyping", url: "https://www.protopie.io/blog/low-fidelity-vs-high-fidelity-prototyping" },
+                    { week: 10, label: "Consistency in Design Systems", url: "https://authentic-digital.co/blog/the-critical-importance-of-consistency-in-design-systems" },
+                    { week: 10, label: "AI Tools for UX Designers (Figma)", url: "https://www.figma.com/resource-library/ai-tools-for-ux-designers/" },
+                    { week: 10, label: "How AI is Changing Early-stage UX", url: "https://www.uxdesigninstitute.com/blog/how-ai-is-changing-early-stage-ux/" },
+                    { week: 10, label: "Why AI-generated UI Fails in Production", url: "https://ministryofprogramming.com/blog/why-ai-generated-ui-fails-in-production" },
+                    { week: 10, label: "AI-Assisted Prototyping (NNgroup video page)", url: "https://www.nngroup.com/videos/ai-assisted-prototyping/" },
+                    { week: 11, label: "User Flow vs Sitemap", url: "https://slickplan.com/blog/user-flow-vs-sitemap" },
+                    { week: 11, label: "Figma — Sitemap Generator Template", url: "https://www.figma.com/templates/sitemap-generator/" },
+                    { week: 11, label: "Figma Community — IA Sitemap Builder", url: "https://www.figma.com/community/file/1357281387241619479/information-architecture-sitemap-builder-for-figma" },
+                    { week: 12, label: "Heuristic Analysis (We Are Testers)", url: "https://www.wearetesters.com/en/ux-research/heuristic-analysis/" },
+                    { week: 12, label: "Heuristic Evaluation vs Usability Testing", url: "https://cleverx.com/blog/heuristic-evaluation-vs-usability-testing-complementary-methods/" },
+                    { week: 12, label: "WAVE Web Accessibility Evaluation Tool", url: "https://wave.webaim.org/" }
                 ]
             },
 
@@ -980,6 +1076,125 @@
                 li.innerHTML = `<i class="fas fa-check text-black"></i> ${escapeHtml(item)}`;
                 softwareList.appendChild(li);
             });
+
+            // Resources — videos (play on site)
+            const videosSection = document.getElementById("resources-videos");
+            const videosList = document.getElementById("resources-videos-list");
+            const videoTitle = document.getElementById("resources-video-title");
+            const videoFrame = document.getElementById("resources-video-frame");
+            const videoFrameWrap = document.getElementById("resources-video-frame-wrap");
+            const videoEmpty = document.getElementById("resources-video-empty");
+            const videoOpen = document.getElementById("resources-video-open");
+            const videoClose = document.getElementById("resources-video-close");
+            const videos = config.resources.videos || [];
+
+            function youtubeWatchUrl(id) {
+                return `https://www.youtube.com/watch?v=${id}`;
+            }
+
+            function youtubeEmbedUrl(id) {
+                return `https://www.youtube.com/embed/${id}?rel=0`;
+            }
+
+            function loadResourceVideo(id, title) {
+                if (!videoFrame || !id) return;
+                if (videoTitle) videoTitle.textContent = title || "Lecture video";
+                if (videoEmpty) videoEmpty.classList.add("hidden");
+                if (videoFrameWrap) videoFrameWrap.classList.remove("hidden");
+                videoFrame.src = youtubeEmbedUrl(id);
+                if (videoOpen) {
+                    videoOpen.href = youtubeWatchUrl(id);
+                    videoOpen.classList.remove("hidden");
+                }
+                if (videoClose) videoClose.classList.remove("hidden");
+                const player = document.getElementById("resources-video-player");
+                if (player) player.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+
+            function clearResourceVideo() {
+                if (videoFrame) {
+                    videoFrame.src = "about:blank";
+                }
+                if (videoFrameWrap) videoFrameWrap.classList.add("hidden");
+                if (videoEmpty) videoEmpty.classList.remove("hidden");
+                if (videoTitle) videoTitle.textContent = "Select a video to play";
+                if (videoOpen) {
+                    videoOpen.href = "#";
+                    videoOpen.classList.add("hidden");
+                }
+                if (videoClose) videoClose.classList.add("hidden");
+            }
+
+            if (videoClose) {
+                videoClose.addEventListener("click", clearResourceVideo);
+            }
+
+            if (videosSection && videosList) {
+                if (videos.length === 0) {
+                    videosSection.remove();
+                } else {
+                    videosList.innerHTML = "";
+                    videos.forEach(video => {
+                        const row = document.createElement("div");
+                        row.className = "flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 border border-gray-200 rounded-lg bg-gray-50";
+                        const thumb = `https://img.youtube.com/vi/${escapeAttr(video.youtubeId)}/hqdefault.jpg`;
+                        row.innerHTML = `
+                            <div class="flex items-start gap-3 min-w-0">
+                                <img src="${thumb}" alt="" class="w-28 h-16 object-cover rounded bg-gray-200 flex-shrink-0" loading="lazy" />
+                                <div class="min-w-0">
+                                    <span class="inline-block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Week ${escapeHtml(String(video.week))}</span>
+                                    <h4 class="font-semibold text-gray-800 text-sm leading-snug">${escapeHtml(video.title)}</h4>
+                                </div>
+                            </div>
+                        `;
+                        const actions = document.createElement("div");
+                        actions.className = "flex items-center gap-2 flex-shrink-0";
+                        const playBtn = document.createElement("button");
+                        playBtn.type = "button";
+                        playBtn.className = "text-sm font-medium bg-black text-white hover:bg-gray-800 px-3 py-1.5 rounded whitespace-nowrap";
+                        playBtn.innerHTML = `<i class="fas fa-play mr-1"></i>Play`;
+                        playBtn.addEventListener("click", () => loadResourceVideo(video.youtubeId, `Week ${video.week} — ${video.title}`));
+                        const openLink = document.createElement("a");
+                        openLink.href = youtubeWatchUrl(video.youtubeId);
+                        openLink.target = "_blank";
+                        openLink.rel = "noopener noreferrer";
+                        openLink.className = "text-sm font-medium text-black hover:underline whitespace-nowrap px-1";
+                        openLink.innerHTML = `<i class="fab fa-youtube mr-1"></i>YouTube`;
+                        actions.appendChild(playBtn);
+                        actions.appendChild(openLink);
+                        row.appendChild(actions);
+                        videosList.appendChild(row);
+                    });
+                }
+            }
+
+            // Resources — links from slides
+            const linksSection = document.getElementById("resources-links");
+            const linksList = document.getElementById("resources-links-list");
+            const links = config.resources.links || [];
+            if (linksSection && linksList) {
+                if (links.length === 0) {
+                    linksSection.remove();
+                } else {
+                    linksList.innerHTML = "";
+                    links.forEach(link => {
+                        const row = document.createElement("a");
+                        row.href = link.url;
+                        row.target = "_blank";
+                        row.rel = "noopener noreferrer";
+                        row.className = "flex items-start sm:items-center justify-between gap-3 p-3 border border-gray-200 rounded-lg bg-gray-50 hover:bg-white hover:border-gray-300 transition-colors";
+                        row.innerHTML = `
+                            <div class="min-w-0">
+                                <span class="inline-block text-xs font-bold uppercase tracking-wider text-gray-500 mb-0.5">Week ${escapeHtml(String(link.week))}</span>
+                                <p class="font-medium text-gray-800 text-sm">${escapeHtml(link.label)}</p>
+                                <p class="text-xs text-gray-500 truncate mt-0.5">${escapeHtml(link.url)}</p>
+                            </div>
+                            <i class="fas fa-external-link-alt text-gray-400 mt-1 flex-shrink-0"></i>
+                        `;
+                        linksList.appendChild(row);
+                    });
+                }
+            }
 
             // Footer
             document.getElementById("footer-copyright").textContent =
