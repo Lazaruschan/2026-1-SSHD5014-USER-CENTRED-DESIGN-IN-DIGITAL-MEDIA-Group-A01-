@@ -56,6 +56,7 @@ git add --force \
   auth.js \
   assets \
   slides \
+  readings \
   publish.sh \
   export-slides.sh \
   embed-slide-assets.py \

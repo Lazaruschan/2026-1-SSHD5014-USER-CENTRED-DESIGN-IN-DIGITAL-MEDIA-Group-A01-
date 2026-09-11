@@ -914,25 +914,44 @@
                     return match ? match[1] : null;
                 }
 
-                function pdfViewerUrl(url, pages) {
+                function absoluteUrl(url) {
+                    try {
+                        return new URL(url, window.location.href).href;
+                    } catch (_) {
+                        return url;
+                    }
+                }
+
+                function pdfNativeUrl(url, pages) {
+                    const absolute = absoluteUrl(url);
                     const page = firstPageFromRange(pages);
-                    if (!page) return url;
-                    return `${url}#page=${page}`;
+                    return page ? `${absolute}#page=${page}` : absolute;
+                }
+
+                // Native PDF-in-iframe often blank on GitHub Pages; PDF.js embeds reliably.
+                function pdfEmbedUrl(url, pages) {
+                    const absolute = absoluteUrl(url);
+                    const page = firstPageFromRange(pages);
+                    const viewer = new URL("https://mozilla.github.io/pdf.js/web/viewer.html");
+                    viewer.searchParams.set("file", absolute);
+                    return page ? `${viewer.href}#page=${page}` : viewer.href;
                 }
 
                 function loadReadingPreview(url, label, pages) {
                     if (!previewFrame || !url) return;
-                    const viewerUrl = pdfViewerUrl(url, pages);
+                    const fileUrl = absoluteUrl(url);
+                    const embedUrl = pdfEmbedUrl(url, pages);
+                    const openUrl = pdfNativeUrl(url, pages);
                     if (previewTitle) previewTitle.textContent = label || "Reading preview";
                     if (previewEmpty) previewEmpty.classList.add("hidden");
                     previewFrame.classList.remove("hidden");
-                    previewFrame.src = viewerUrl;
+                    previewFrame.src = embedUrl;
                     if (previewOpen) {
-                        previewOpen.href = viewerUrl;
+                        previewOpen.href = openUrl;
                         previewOpen.classList.remove("hidden");
                     }
                     if (previewDownload) {
-                        previewDownload.href = url;
+                        previewDownload.href = fileUrl;
                         previewDownload.classList.remove("hidden");
                     }
                     if (previewClose) previewClose.classList.remove("hidden");
