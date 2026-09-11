@@ -160,6 +160,37 @@
                 </div>
             </div>
 
+            <div id="reading-preview-panel" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 border-b border-gray-200 bg-gray-50">
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Reader</p>
+                        <p id="reading-preview-title" class="font-semibold text-gray-800 truncate">Select a reading to
+                            view</p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <a id="reading-preview-download" href="#" download
+                            class="hidden text-sm font-medium text-black hover:underline px-3 py-2">
+                            <i class="fas fa-download mr-1"></i> Download
+                        </a>
+                        <a id="reading-preview-open" href="#" target="_blank" rel="noopener noreferrer"
+                            class="hidden text-sm font-medium text-black hover:underline px-3 py-2">
+                            <i class="fas fa-external-link-alt mr-1"></i> Open in new tab
+                        </a>
+                        <button type="button" id="reading-preview-close"
+                            class="hidden text-sm text-gray-500 hover:text-black px-3 py-2">
+                            Close
+                        </button>
+                    </div>
+                </div>
+                <div id="reading-preview-empty"
+                    class="min-h-[50vh] bg-gray-100 flex items-center justify-center text-gray-500 text-sm p-6 text-center">
+                    Click <span class="font-semibold mx-1">Read</span> on a week above to open the PDF here.
+                </div>
+                <iframe id="reading-preview-frame" title="Reading PDF preview"
+                    class="hidden w-full min-h-[75vh] bg-gray-200 border-0"></iframe>
+            </div>
+
             <div id="reading-library" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                 <h3 class="text-lg font-bold text-gray-800 mb-2">Library-only (recommended)</h3>
                 <p class="text-gray-600 text-sm mb-4">Full textbooks stay on the university library — not hosted here.</p>
@@ -340,7 +371,7 @@
             // --- Reading ---
             reading: {
                 heading: "Weekly Readings",
-                note: "Each lecture week has at most 7 PDF pages to read together in class with the lecture slides. Page numbers are the PDF viewer page numbers (1 = first page of the file). Download full PDFs from the Resources tab.",
+                note: "Each lecture week has at most 7 PDF pages to read together in class with the lecture slides. Use Read to view a PDF on this page (opens at the assigned start page when possible). Page numbers are the PDF viewer page numbers (1 = first page of the file).",
                 weeks: [
                     {
                         week: 1,
@@ -772,6 +803,66 @@
                 const readingContainer = document.getElementById("reading-container");
                 const readingLibraryList = document.getElementById("reading-library-list");
                 const readingLibrarySection = document.getElementById("reading-library");
+                const previewTitle = document.getElementById("reading-preview-title");
+                const previewFrame = document.getElementById("reading-preview-frame");
+                const previewEmpty = document.getElementById("reading-preview-empty");
+                const previewOpen = document.getElementById("reading-preview-open");
+                const previewDownload = document.getElementById("reading-preview-download");
+                const previewClose = document.getElementById("reading-preview-close");
+
+                function firstPageFromRange(pages) {
+                    if (!pages) return null;
+                    const match = String(pages).match(/(\d+)/);
+                    return match ? match[1] : null;
+                }
+
+                function pdfViewerUrl(url, pages) {
+                    const page = firstPageFromRange(pages);
+                    if (!page) return url;
+                    return `${url}#page=${page}`;
+                }
+
+                function loadReadingPreview(url, label, pages) {
+                    if (!previewFrame || !url) return;
+                    const viewerUrl = pdfViewerUrl(url, pages);
+                    if (previewTitle) previewTitle.textContent = label || "Reading preview";
+                    if (previewEmpty) previewEmpty.classList.add("hidden");
+                    previewFrame.classList.remove("hidden");
+                    previewFrame.src = viewerUrl;
+                    if (previewOpen) {
+                        previewOpen.href = viewerUrl;
+                        previewOpen.classList.remove("hidden");
+                    }
+                    if (previewDownload) {
+                        previewDownload.href = url;
+                        previewDownload.classList.remove("hidden");
+                    }
+                    if (previewClose) previewClose.classList.remove("hidden");
+                    const panel = document.getElementById("reading-preview-panel");
+                    if (panel) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                }
+
+                function clearReadingPreview() {
+                    if (previewFrame) {
+                        previewFrame.src = "about:blank";
+                        previewFrame.classList.add("hidden");
+                    }
+                    if (previewEmpty) previewEmpty.classList.remove("hidden");
+                    if (previewTitle) previewTitle.textContent = "Select a reading to view";
+                    if (previewOpen) {
+                        previewOpen.href = "#";
+                        previewOpen.classList.add("hidden");
+                    }
+                    if (previewDownload) {
+                        previewDownload.href = "#";
+                        previewDownload.classList.add("hidden");
+                    }
+                    if (previewClose) previewClose.classList.add("hidden");
+                }
+
+                if (previewClose) {
+                    previewClose.addEventListener("click", clearReadingPreview);
+                }
 
                 if (readingHeading && config.reading.heading) readingHeading.textContent = config.reading.heading;
                 if (readingNote) readingNote.textContent = config.reading.note || "";
@@ -782,13 +873,41 @@
                         const row = document.createElement("div");
                         row.className = "flex flex-col sm:flex-row sm:items-start justify-between gap-3 p-4 border border-gray-200 rounded-lg bg-gray-50";
 
-                        const filesHtml = (week.files || []).map(file => `
-                            <a href="${escapeAttr(file.url)}" download
-                                class="text-sm font-medium bg-black text-white hover:bg-gray-800 px-3 py-1.5 rounded whitespace-nowrap inline-flex items-center gap-1">
-                                <i class="fas fa-file-pdf"></i> ${escapeHtml(file.label)}
-                                ${file.pages ? `<span class="opacity-80 font-normal">· pp. ${escapeHtml(file.pages)}</span>` : ""}
-                            </a>
-                        `).join("");
+                        const actions = document.createElement("div");
+                        actions.className = "flex items-center flex-wrap gap-2";
+
+                        (week.files || []).forEach(file => {
+                            const group = document.createElement("div");
+                            group.className = "inline-flex flex-wrap items-center gap-2";
+
+                            const readBtn = document.createElement("button");
+                            readBtn.type = "button";
+                            readBtn.className = "text-sm font-medium bg-black text-white hover:bg-gray-800 px-3 py-1.5 rounded whitespace-nowrap";
+                            readBtn.innerHTML = `<i class="fas fa-book-open mr-1"></i>Read${file.pages ? ` · pp. ${escapeHtml(file.pages)}` : ""}`;
+                            readBtn.addEventListener("click", () => {
+                                const label = `Week ${week.week} — ${week.title}${file.pages ? ` (pp. ${file.pages})` : ""}`;
+                                loadReadingPreview(file.url, label, file.pages);
+                            });
+
+                            const downloadLink = document.createElement("a");
+                            downloadLink.href = file.url;
+                            downloadLink.download = "";
+                            downloadLink.className = "text-sm font-medium text-black hover:underline whitespace-nowrap px-1";
+                            downloadLink.innerHTML = `<i class="fas fa-download mr-1"></i>Download`;
+                            if ((week.files || []).length > 1) {
+                                downloadLink.title = file.label;
+                            }
+
+                            group.appendChild(readBtn);
+                            group.appendChild(downloadLink);
+                            if ((week.files || []).length > 1) {
+                                const name = document.createElement("span");
+                                name.className = "text-xs text-gray-500 w-full sm:w-auto";
+                                name.textContent = file.label;
+                                group.appendChild(name);
+                            }
+                            actions.appendChild(group);
+                        });
 
                         row.innerHTML = `
                             <div class="min-w-0">
@@ -796,8 +915,8 @@
                                 <h3 class="font-semibold text-gray-800">${escapeHtml(week.title)}</h3>
                                 ${week.pages ? `<p class="text-sm text-gray-500 mt-1">In-class pages: ${escapeHtml(week.pages)}</p>` : ""}
                             </div>
-                            <div class="flex items-center flex-wrap gap-2">${filesHtml}</div>
                         `;
+                        row.appendChild(actions);
                         readingContainer.appendChild(row);
                     });
                 }
