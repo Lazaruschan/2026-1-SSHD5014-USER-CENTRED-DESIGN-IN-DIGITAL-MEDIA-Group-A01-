@@ -18,6 +18,10 @@ set "REPO_URL=https://github.com/%REPO_SLUG%.git"
 set "BRANCH=main"
 set "REMOTE=origin"
 set "PAGES_URL=https://lazaruschan.github.io/2026-1-SSHD5014-USER-CENTRED-DESIGN-IN-DIGITAL-MEDIA-Group-A01-/"
+REM #region agent log
+set "DEBUG_LOG=%~dp0..\..\debug-14db96.log"
+set "DEBUG_HELPER=%~dp0_debug_log.ps1"
+REM #endregion
 
 echo ==^> Publishing from: %CD%
 echo ==^> Target: %REPO_URL%
@@ -75,6 +79,9 @@ if not exist ".git\" (
   if errorlevel 1 goto :fail
 )
 
+REM OneDrive can break Git atomic appends to .git/logs/HEAD — disable for this repo
+git config windows.appendAtomically false
+
 REM Keep ignore list current
 (
   echo node_modules/
@@ -128,11 +135,23 @@ git rm --cached -f *.rtf >nul 2>&1
 echo ==^> Staged files:
 git status --short
 
+REM #region agent log
+set "HEAD_ATTR="
+if exist ".git\logs\HEAD" for /f "delims=" %%A in ('powershell -NoProfile -Command "(Get-Item '.git\logs\HEAD' -Force).Attributes"') do set "HEAD_ATTR=%%A"
+for /f "delims=" %%A in ('git config --get windows.appendAtomically') do set "APPEND_VAL=%%A"
+powershell -NoProfile -File "%DEBUG_HELPER%" -LogPath "%DEBUG_LOG%" -HypothesisId "A" -Location "publish.bat:pre-commit" -Message "Pre-commit state" -DataJson "{\"inOneDrive\":true,\"appendAtomically\":\"!APPEND_VAL!\",\"headLogAttrs\":\"!HEAD_ATTR!\"}"
+REM #endregion
+
 git diff --cached --quiet
 if errorlevel 1 (
   echo ==^> Committing
-  git commit -m "Publish SSHD5014 User-centred Design in Digital Media course website."
-  if errorlevel 1 goto :fail
+  git commit -m "Publish SSHD5014 User-centred Design in Digital Media course website." > "%TEMP%\sshd5014-commit-out.txt" 2>&1
+  set "COMMIT_RC=!ERRORLEVEL!"
+  type "%TEMP%\sshd5014-commit-out.txt"
+  REM #region agent log
+  powershell -NoProfile -File "%DEBUG_HELPER%" -LogPath "%DEBUG_LOG%" -HypothesisId "A" -Location "publish.bat:commit" -Message "Commit result" -DataJson "{\"exitCode\":!COMMIT_RC!,\"appendAtomically\":\"!APPEND_VAL!\"}" -OutputFile "%TEMP%\sshd5014-commit-out.txt"
+  REM #endregion
+  if not "!COMMIT_RC!"=="0" goto :fail
 ) else (
   git rev-parse HEAD >nul 2>&1
   if errorlevel 1 (
@@ -157,13 +176,22 @@ if errorlevel 1 (
 if errorlevel 1 goto :fail
 
 echo ==^> Pushing to %REMOTE%/%BRANCH% as %GH_USER%
-git -c credential.helper= push -u "!PUSH_URL!" "%BRANCH%"
-if errorlevel 1 goto :fail
+git -c credential.helper= push -u "!PUSH_URL!" "%BRANCH%" > "%TEMP%\sshd5014-push-out.txt" 2>&1
+set "PUSH_RC=!ERRORLEVEL!"
+type "%TEMP%\sshd5014-push-out.txt"
+REM #region agent log
+powershell -NoProfile -File "%DEBUG_HELPER%" -LogPath "%DEBUG_LOG%" -HypothesisId "E" -Location "publish.bat:push" -Message "Push result" -DataJson "{\"exitCode\":!PUSH_RC!}" -OutputFile "%TEMP%\sshd5014-push-out.txt"
+REM #endregion
+if not "!PUSH_RC!"=="0" goto :fail
 
 REM Clear secrets from this session
 set "GH_TOKEN="
 set "GH_TOKEN_ENC="
 set "PUSH_URL="
+
+REM #region agent log
+powershell -NoProfile -File "%DEBUG_HELPER%" -LogPath "%DEBUG_LOG%" -HypothesisId "A" -Location "publish.bat:success" -Message "Publish completed" -DataJson "{\"ok\":true}"
+REM #endregion
 
 echo.
 echo Done.
@@ -178,7 +206,11 @@ exit /b 0
 set "GH_TOKEN="
 set "GH_TOKEN_ENC="
 set "PUSH_URL="
+REM #region agent log
+powershell -NoProfile -File "%DEBUG_HELPER%" -LogPath "%DEBUG_LOG%" -HypothesisId "A" -Location "publish.bat:fail" -Message "Publish failed" -DataJson "{\"ok\":false}"
+REM #endregion
 echo.
 echo Publish failed. Check username/token ^(repo scope needed^) and messages above.
+echo If commit failed under OneDrive, ensure: git config windows.appendAtomically false
 pause
 exit /b 1
