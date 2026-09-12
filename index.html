@@ -150,6 +150,47 @@
             </div>
         </div>
 
+        <!-- TUTORIAL NOTES TAB -->
+        <div id="tutorial-notes" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h2 id="tutorial-notes-heading" class="text-2xl font-bold text-black mb-2">Tutorial Notes</h2>
+                <p id="tutorial-notes-note" class="text-gray-600 mb-6"></p>
+                <div id="tutorial-notes-container" class="grid gap-3">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div id="tutorial-notes-preview-panel" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 border-b border-gray-200 bg-gray-50">
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Reader</p>
+                        <p id="tutorial-notes-preview-title" class="font-semibold text-gray-800 truncate">Select a tutorial note to view</p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <a id="tutorial-notes-preview-download" href="#" download
+                            class="hidden text-sm font-medium text-black hover:underline px-3 py-2">
+                            <i class="fas fa-download mr-1"></i> Download
+                        </a>
+                        <a id="tutorial-notes-preview-open" href="#" target="_blank" rel="noopener noreferrer"
+                            class="hidden text-sm font-medium text-black hover:underline px-3 py-2">
+                            <i class="fas fa-external-link-alt mr-1"></i> Open in new tab
+                        </a>
+                        <button type="button" id="tutorial-notes-preview-close"
+                            class="hidden text-sm text-gray-500 hover:text-black px-3 py-2">
+                            Close
+                        </button>
+                    </div>
+                </div>
+                <div id="tutorial-notes-preview-empty"
+                    class="min-h-[50vh] bg-gray-100 flex items-center justify-center text-gray-500 text-sm p-6 text-center">
+                    Click <span class="font-semibold mx-1">Read</span> on a week above to open the PDF here.
+                </div>
+                <iframe id="tutorial-notes-preview-frame" title="Tutorial notes PDF preview"
+                    class="hidden w-full min-h-[75vh] bg-gray-200 border-0"></iframe>
+            </div>
+        </div>
+
         <!-- READING TAB -->
         <div id="reading" class="tab-content space-y-6">
             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
@@ -294,6 +335,7 @@
                 { id: "schedule", label: "Schedule", icon: "fas fa-calendar-alt", enabled: true },
                 { id: "assessments", label: "Assessments", icon: "fas fa-file-alt", enabled: true },
                 { id: "slides", label: "Slides", icon: "fas fa-images", enabled: true },
+                { id: "tutorial-notes", label: "Tutorial Notes", icon: "fas fa-clipboard-list", enabled: true },
                 { id: "reading", label: "Reading", icon: "fas fa-book-open", enabled: true },
                 { id: "resources", label: "Resources", icon: "fas fa-download", enabled: true }
             ],
@@ -416,6 +458,26 @@
                     { week: 11, title: "Information Architecture", lectureUrl: "slides/week-11.html" },
                     { week: 12, title: "Usability testing", lectureUrl: "slides/week-12.html" },
                     { week: 13, title: "Final Presentation", note: "No lecture deck — final presentations" }
+                ]
+            },
+
+            // --- Tutorial Notes ---
+            tutorialNotes: {
+                heading: "Tutorial Notes",
+                note: "Weekly tutorial worksheets (PDF). Use Read to view on this page, or Download for offline use during studio activities.",
+                weeks: [
+                    { week: 1, title: "Design workflow orientation", url: "tutorial-notes/SHDS5014_tutorial_week_01_design_workflow_orientation.pdf" },
+                    { week: 2, title: "Platform case analysis", url: "tutorial-notes/SHDS5014_tutorial_week_02_platform_case_analysis.pdf" },
+                    { week: 3, title: "Interface critique", url: "tutorial-notes/SHDS5014_tutorial_week_03_interface_critique.pdf" },
+                    { week: 4, title: "Accessibility & cultural review", url: "tutorial-notes/SHDS5014_tutorial_week_04_accessibility_cultural_review.pdf" },
+                    { week: 5, title: "Research planning", url: "tutorial-notes/SHDS5014_tutorial_week_05_research_planning.pdf" },
+                    { week: 6, title: "Research & affinity mapping", url: "tutorial-notes/SHDS5014_tutorial_week_06_research_affinity.pdf" },
+                    { week: 7, title: "Personas & journeys", url: "tutorial-notes/SHDS5014_tutorial_week_07_personas_journeys.pdf" },
+                    { week: 8, title: "Ideation workshop", url: "tutorial-notes/SHDS5014_tutorial_week_08_ideation_workshop.pdf" },
+                    { week: 9, title: "Wireframing workshop", url: "tutorial-notes/SHDS5014_tutorial_week_09_wireframing_workshop.pdf" },
+                    { week: 10, title: "High-fidelity prototype", url: "tutorial-notes/SHDS5014_tutorial_week_10_hifi_prototype.pdf" },
+                    { week: 11, title: "Card sorting & IA", url: "tutorial-notes/SHDS5014_tutorial_week_11_card_sorting_ia.pdf" },
+                    { week: 12, title: "Usability testing workshop", url: "tutorial-notes/SHDS5014_tutorial_week_12_usability_testing_workshop.pdf" }
                 ]
             },
 
@@ -890,6 +952,122 @@
                         `;
                         row.appendChild(actions);
                         slidesContainer.appendChild(row);
+                    });
+                }
+            }
+
+            // Tutorial Notes
+            if (config.tutorialNotes) {
+                const tnHeading = document.getElementById("tutorial-notes-heading");
+                const tnNote = document.getElementById("tutorial-notes-note");
+                const tnContainer = document.getElementById("tutorial-notes-container");
+                const previewTitle = document.getElementById("tutorial-notes-preview-title");
+                const previewFrame = document.getElementById("tutorial-notes-preview-frame");
+                const previewEmpty = document.getElementById("tutorial-notes-preview-empty");
+                const previewOpen = document.getElementById("tutorial-notes-preview-open");
+                const previewDownload = document.getElementById("tutorial-notes-preview-download");
+                const previewClose = document.getElementById("tutorial-notes-preview-close");
+
+                function absoluteUrl(url) {
+                    try {
+                        return new URL(url, window.location.href).href;
+                    } catch (_) {
+                        return url;
+                    }
+                }
+
+                function pdfEmbedUrl(url) {
+                    const absolute = absoluteUrl(url);
+                    const viewer = new URL("https://mozilla.github.io/pdf.js/web/viewer.html");
+                    viewer.searchParams.set("file", absolute);
+                    return viewer.href;
+                }
+
+                function loadTutorialNotesPreview(url, label) {
+                    if (!previewFrame || !url) return;
+                    const fileUrl = absoluteUrl(url);
+                    if (previewTitle) previewTitle.textContent = label || "Tutorial notes preview";
+                    if (previewEmpty) previewEmpty.classList.add("hidden");
+                    previewFrame.classList.remove("hidden");
+                    previewFrame.src = pdfEmbedUrl(url);
+                    if (previewOpen) {
+                        previewOpen.href = fileUrl;
+                        previewOpen.classList.remove("hidden");
+                    }
+                    if (previewDownload) {
+                        previewDownload.href = fileUrl;
+                        previewDownload.classList.remove("hidden");
+                    }
+                    if (previewClose) previewClose.classList.remove("hidden");
+                    const panel = document.getElementById("tutorial-notes-preview-panel");
+                    if (panel) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                }
+
+                function clearTutorialNotesPreview() {
+                    if (previewFrame) {
+                        previewFrame.src = "about:blank";
+                        previewFrame.classList.add("hidden");
+                    }
+                    if (previewEmpty) previewEmpty.classList.remove("hidden");
+                    if (previewTitle) previewTitle.textContent = "Select a tutorial note to view";
+                    if (previewOpen) {
+                        previewOpen.href = "#";
+                        previewOpen.classList.add("hidden");
+                    }
+                    if (previewDownload) {
+                        previewDownload.href = "#";
+                        previewDownload.classList.add("hidden");
+                    }
+                    if (previewClose) previewClose.classList.add("hidden");
+                }
+
+                if (previewClose) {
+                    previewClose.addEventListener("click", clearTutorialNotesPreview);
+                }
+
+                if (tnHeading && config.tutorialNotes.heading) tnHeading.textContent = config.tutorialNotes.heading;
+                if (tnNote) tnNote.textContent = config.tutorialNotes.note || "";
+
+                if (tnContainer) {
+                    tnContainer.innerHTML = "";
+                    (config.tutorialNotes.weeks || []).forEach(week => {
+                        const row = document.createElement("div");
+                        row.className = "flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border border-gray-200 rounded-lg bg-gray-50";
+                        const label = `Week ${week.week} — ${week.title}`;
+
+                        const actions = document.createElement("div");
+                        actions.className = "flex items-center flex-wrap gap-2";
+
+                        if (week.url) {
+                            const readBtn = document.createElement("button");
+                            readBtn.type = "button";
+                            readBtn.className = "text-sm font-medium bg-black text-white hover:bg-gray-800 px-3 py-1.5 rounded whitespace-nowrap";
+                            readBtn.innerHTML = `<i class="fas fa-book-open mr-1"></i>Read`;
+                            readBtn.addEventListener("click", () => loadTutorialNotesPreview(week.url, label));
+
+                            const downloadLink = document.createElement("a");
+                            downloadLink.href = week.url;
+                            downloadLink.download = "";
+                            downloadLink.className = "text-sm font-medium text-black hover:underline whitespace-nowrap px-1";
+                            downloadLink.innerHTML = `<i class="fas fa-download mr-1"></i>Download`;
+
+                            actions.appendChild(readBtn);
+                            actions.appendChild(downloadLink);
+                        } else {
+                            const soon = document.createElement("span");
+                            soon.className = "text-sm text-gray-400";
+                            soon.textContent = week.note || "Coming soon";
+                            actions.appendChild(soon);
+                        }
+
+                        row.innerHTML = `
+                            <div class="min-w-0">
+                                <span class="inline-block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Week ${escapeHtml(String(week.week))}</span>
+                                <h3 class="font-semibold text-gray-800">${escapeHtml(week.title)}</h3>
+                            </div>
+                        `;
+                        row.appendChild(actions);
+                        tnContainer.appendChild(row);
                     });
                 }
             }

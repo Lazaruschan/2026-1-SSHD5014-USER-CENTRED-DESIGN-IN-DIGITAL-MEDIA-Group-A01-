@@ -4,7 +4,9 @@
   "description": "SSHD5014 User-centred Design in Digital Media course website",
   "main": "index.js",
   "scripts": {
-    "export-slides": "./export-slides.sh"
+    "export-slides": "./export-slides.sh",
+    "sync-tutorial-notes": "./sync-tutorial-notes.sh",
+    "publish": "./publish.sh"
   },
   "keywords": [],
   "author": "",
