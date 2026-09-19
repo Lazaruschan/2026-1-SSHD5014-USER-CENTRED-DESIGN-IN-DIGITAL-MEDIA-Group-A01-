@@ -19,7 +19,7 @@ set "BRANCH=main"
 set "REMOTE=origin"
 set "PAGES_URL=https://lazaruschan.github.io/2026-1-SSHD5014-USER-CENTRED-DESIGN-IN-DIGITAL-MEDIA-Group-A01-/"
 REM #region agent log
-set "DEBUG_LOG=%~dp0..\..\debug-14db96.log"
+set "DEBUG_LOG=%~dp0..\..\debug-e10825.log"
 set "DEBUG_HELPER=%~dp0_debug_log.ps1"
 REM #endregion
 
@@ -175,12 +175,49 @@ if errorlevel 1 (
 )
 if errorlevel 1 goto :fail
 
+REM #region agent log
+echo ==^> Fetching remote for divergence check
+git -c credential.helper= fetch "!PUSH_URL!" "%BRANCH%" > "%TEMP%\sshd5014-fetch-out.txt" 2>&1
+set "FETCH_RC=!ERRORLEVEL!"
+type "%TEMP%\sshd5014-fetch-out.txt"
+set "LOCAL_HEAD="
+set "REMOTE_HEAD="
+set "ROOT_COMMIT="
+set "MERGE_BASE="
+set "AHEAD=0"
+set "BEHIND=0"
+set "LOCAL_COUNT=0"
+for /f %%H in ('git rev-parse HEAD 2^>nul') do set "LOCAL_HEAD=%%H"
+for /f %%R in ('git rev-parse "origin/%BRANCH%" 2^>nul') do set "REMOTE_HEAD=%%R"
+for /f %%P in ('git rev-list --max-parents^=0 HEAD 2^>nul') do set "ROOT_COMMIT=%%P"
+for /f %%C in ('git rev-list --count HEAD 2^>nul') do set "LOCAL_COUNT=%%C"
+for /f %%M in ('git merge-base HEAD "origin/%BRANCH%" 2^>nul') do set "MERGE_BASE=%%M"
+for /f "tokens=1,2" %%A in ('git rev-list --left-right --count HEAD..."origin/%BRANCH%" 2^>nul') do (
+  set "AHEAD=%%A"
+  set "BEHIND=%%B"
+)
+set "HAS_ISO=0"
+if exist "readings\ISO9241-210_2019.pdf" set "HAS_ISO=1"
+set "HAS_SAMPLE=0"
+if exist "readings\ISO9241-210_2019_sample.pdf" set "HAS_SAMPLE=1"
+set "UNRELATED=false"
+if "!MERGE_BASE!"=="" set "UNRELATED=true"
+set "IS_ORPHAN=false"
+if /I "!ROOT_COMMIT!"=="!LOCAL_HEAD!" set "IS_ORPHAN=true"
+if "!LOCAL_COUNT!"=="1" if "!MERGE_BASE!"=="" set "IS_ORPHAN=true"
+if "!LOCAL_COUNT!"=="2" if "!MERGE_BASE!"=="" set "IS_ORPHAN=true"
+powershell -NoProfile -File "%DEBUG_HELPER%" -LogPath "%DEBUG_LOG%" -HypothesisId "A" -Location "publish.bat:pre-push" -Message "History divergence check" -DataJson "{\"fetchRc\":!FETCH_RC!,\"localHead\":\"!LOCAL_HEAD!\",\"remoteHead\":\"!REMOTE_HEAD!\",\"mergeBase\":\"!MERGE_BASE!\",\"ahead\":!AHEAD!,\"behind\":!BEHIND!,\"rootCommit\":\"!ROOT_COMMIT!\",\"localCount\":!LOCAL_COUNT!,\"hasIso\":!HAS_ISO!,\"hasSample\":!HAS_SAMPLE!,\"unrelated\":!UNRELATED!}" -OutputFile "%TEMP%\sshd5014-fetch-out.txt"
+powershell -NoProfile -File "%DEBUG_HELPER%" -LogPath "%DEBUG_LOG%" -HypothesisId "B" -Location "publish.bat:pre-push-behind" -Message "Remote-ahead check" -DataJson "{\"behind\":!BEHIND!,\"ahead\":!AHEAD!}"
+powershell -NoProfile -File "%DEBUG_HELPER%" -LogPath "%DEBUG_LOG%" -HypothesisId "C" -Location "publish.bat:pre-push-pull" -Message "Publish script has no pull/rebase before push" -DataJson "{\"pullBeforePush\":false,\"behind\":!BEHIND!}"
+powershell -NoProfile -File "%DEBUG_HELPER%" -LogPath "%DEBUG_LOG%" -HypothesisId "D" -Location "publish.bat:pre-push-orphan" -Message "Orphan root check" -DataJson "{\"rootCommit\":\"!ROOT_COMMIT!\",\"localHead\":\"!LOCAL_HEAD!\",\"localCount\":!LOCAL_COUNT!,\"isOrphan\":!IS_ORPHAN!,\"unrelated\":!UNRELATED!}"
+REM #endregion
+
 echo ==^> Pushing to %REMOTE%/%BRANCH% as %GH_USER%
 git -c credential.helper= push -u "!PUSH_URL!" "%BRANCH%" > "%TEMP%\sshd5014-push-out.txt" 2>&1
 set "PUSH_RC=!ERRORLEVEL!"
 type "%TEMP%\sshd5014-push-out.txt"
 REM #region agent log
-powershell -NoProfile -File "%DEBUG_HELPER%" -LogPath "%DEBUG_LOG%" -HypothesisId "E" -Location "publish.bat:push" -Message "Push result" -DataJson "{\"exitCode\":!PUSH_RC!}" -OutputFile "%TEMP%\sshd5014-push-out.txt"
+powershell -NoProfile -File "%DEBUG_HELPER%" -LogPath "%DEBUG_LOG%" -HypothesisId "E" -Location "publish.bat:push" -Message "Push result" -DataJson "{\"exitCode\":!PUSH_RC!,\"behind\":!BEHIND!,\"mergeBase\":\"!MERGE_BASE!\",\"unrelated\":!UNRELATED!}" -OutputFile "%TEMP%\sshd5014-push-out.txt"
 REM #endregion
 if not "!PUSH_RC!"=="0" goto :fail
 

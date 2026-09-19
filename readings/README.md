@@ -11,7 +11,7 @@ No HTML copies. Full textbooks stay on the university library — see [Library-o
 | Week | Theme | File(s) | Pages | Count |
 |------|--------|---------|-------|-------|
 | 1 | Intro to UCD | `Myers1998_BriefHistoryHCI.pdf` | 1–7 | 7 |
-| 2 | Foundations of UCD | `ISO9241-210_2019_sample.pdf` | 6–7, 11–13 | 5 |
+| 2 | Foundations of UCD | `ISO9241-210_2019.pdf` | 6–7, 11–13 | 5 |
 | 3 | HCI principles | `Nielsen1994_EnhancingExplanatoryPowerUsabilityHeuristics.pdf` | 1–7 | 7 |
 | 4 | Accessibility & inclusion | `Microsoft_InclusiveDesign_Manual.pdf` | 8–14 | 7 |
 | 5 | User research methods | `DOE2017_UsabilityGuidebook.pdf` | 2–3, 8–10 | 5 |
@@ -39,7 +39,7 @@ No HTML copies. Full textbooks stay on the university library — see [Library-o
 
 ### Week 2 — Foundations of UCD
 
-**Read:** `ISO9241-210_2019_sample.pdf` **pages 6–7, 11–13** (skip copyright/TOC filler on earlier pages)
+**Read:** `ISO9241-210_2019.pdf` **pages 6–7, 11–13** (skip copyright/TOC filler on earlier pages)
 
 **What you will notice:** Human-centred design as a lifecycle stance; Scope; rationale; §5 principles (users throughout, evaluation-driven design, whole UX).
 
@@ -170,7 +170,7 @@ No HTML copies. Full textbooks stay on the university library — see [Library-o
 |------|----------------|
 | `Myers1998_BriefHistoryHCI.pdf` | 1 |
 | `Myers1996_BriefHistoryHCI_techreport.pdf` | Optional |
-| `ISO9241-210_2019_sample.pdf` | 2 |
+| `ISO9241-210_2019.pdf` | 2 |
 | `Nielsen1994_EnhancingExplanatoryPowerUsabilityHeuristics.pdf` | 3 |
 | `Microsoft_InclusiveDesign_Manual.pdf` | 4 |
 | `Microsoft_ProductInclusionToolkit.pdf` | 8 |
